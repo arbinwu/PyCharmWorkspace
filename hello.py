@@ -96,3 +96,4 @@ elif bmi <= 32:
     print('肥胖')
 else:
     print('过于肥胖')
+
