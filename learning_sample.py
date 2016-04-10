@@ -1,6 +1,7 @@
 # # -*- coding: utf-8 -*-
 import math
 import os
+import functools
 from functools import reduce
 from collections import Iterable
 from collections import Iterator
@@ -220,6 +221,7 @@ while True:
         print('return value = ' + e.value)
         break
 g = fib(6)
+# print(list(g))
 print('Iterator is', isinstance(g, Iterator))
 for n in g:
     print(n)
@@ -313,3 +315,162 @@ def str2float(s):
 
 
 print('str2float(\'123.456\') =', str2float('123.456'))
+
+
+# filter筛选
+def not_empty(s):
+    return s and s.strip()
+
+
+print(list(filter(not_empty, ['A', '', 'B', None, 'C', '  '])))
+
+
+def _odd_iter():
+    n = 1
+    while True:
+        n = n + 2
+        yield n
+
+
+def _not_divisible(n):
+    return lambda x: x % n > 0
+
+
+def primes():
+    yield 2
+    it = _odd_iter()
+    # print(it)
+    while True:
+        n = next(it)
+        yield n
+        it = filter(_not_divisible(n), it)
+
+
+# p = primes()
+
+# 打印1000以内的素数:
+# for n in p:
+for n in primes():
+    if n < 100:
+        print(n)
+    else:
+        break
+
+
+# 找回数
+def num2str(n):
+    s = str(n)
+    sw = s[::-1]  # 切片求字符串逆序
+    return s == sw
+
+
+def is_palindrome(n):
+    if num2str(n):
+        return n
+
+
+output = filter(is_palindrome, range(1, 1000))
+print(list(output))
+
+L = [('Bob', 75), ('Adam', 92), ('Bart', 66), ('Lisa', 88)]
+
+
+# sort by name
+def by_name(t):
+    return t[0].lower()
+
+
+L2 = sorted(L, key=by_name)
+print(L2)
+
+
+# sort by score
+def by_score(t, *args, **kw):
+    return t[1]
+
+
+L2 = sorted(L, key=by_score, reverse=True)
+print(L2)
+
+
+def count():
+    fs = []
+    for i in range(1, 4):
+        def f():
+            return i * i
+
+        fs.append(f)
+    return fs
+
+
+f1, f2, f3 = count()
+print(f1(), f2(), f3())
+
+
+# 装饰器
+def log(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        print('begin call %s()' % func.__name__)
+        func(*args, **kwargs)
+        print('end call %s()' % func.__name__)
+
+    return wrapper
+
+
+@log
+def now():
+    print('2016-4-10')
+
+
+now()
+
+
+# 带参数的装饰器
+def log(text):
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kw):
+            print('%s %s():' % (text, func.__name__))
+            return func(*args, **kw)
+
+        return wrapper
+
+    return decorator
+
+
+@log('execute')
+def now():
+    print('2015-3-25')
+
+
+now()
+
+
+# 带或不带参数通用
+def log(text='call'):
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kw):
+            print('begin %s %s():' % (text, func.__name__))
+            v = func(*args, **kw)
+            print('end %s %s():' % (text, func.__name__))
+            return v
+
+        return wrapper
+
+    return log()(text) if hasattr(text, '__call__') else decorator
+    # 等价于上面
+    # if hasattr(text, '__call__'):     判断text是否为函数
+    #     print(text.__name__)          是函数
+    #     return log()(text)            相当于先执行log() return decorator 然后 decorator(now)
+    # else:
+    #     return decorator              传入的有字符串 则不为函数 即先log('str') 然后同上
+
+
+@log
+def now():
+    print('2015-4-10')
+
+
+now()
