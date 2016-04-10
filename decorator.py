@@ -33,7 +33,7 @@ def log(text):
 
 @log('execute')
 def now():
-    print('2015-3-25')
+    print('2016-4-10')
 
 
 # 带或不带参数通用
@@ -59,4 +59,4 @@ def log(text='call'):
 
 @log
 def now():
-    print('2015-4-10')
+    print('2016-4-10')
