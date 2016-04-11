@@ -1,10 +1,14 @@
-# # -*- coding: utf-8 -*-
+#!/usr/bin/env python3.5
+# -*- coding: utf-8 -*-
+__author__ = 'Arbin Wu'
+import sys
 import math
 import os
 import functools
 from functools import reduce
 from collections import Iterable
 from collections import Iterator
+
 
 print('中文测试')
 # name = input('please input your name:')
@@ -474,3 +478,13 @@ def now():
 
 
 now()
+
+
+# 偏函数
+def int2(x, base=2):
+    return int(x, base)
+
+
+print(int2('1000000'))
+int2 = functools.partial(int, base=2)
+print(int2('1000000'))
