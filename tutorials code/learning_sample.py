@@ -1,7 +1,6 @@
 #!/usr/bin/env python3.5
 # -*- coding: utf-8 -*-
-__author__ = 'Arbin Wu'
-import sys
+
 import math
 import os
 import functools
@@ -9,6 +8,7 @@ from functools import reduce
 from collections import Iterable
 from collections import Iterator
 
+__author__ = 'Arbin Wu'
 
 print('中文测试')
 # name = input('please input your name:')
